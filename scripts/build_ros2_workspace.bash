@@ -67,6 +67,7 @@ if [ -z $ros_distro ]; then
       if [ -z $ros_path ]; then
         echo "- No ROS 2 distro installed or not installed in the default directory."
         echo "  If you are using a ROS 2 version installed from source, please set the install location with '--ros1_path' arg! (ex: ~/ros_src/eloquent/install). Otherwise, please install ROS 2 Dashing following https://index.ros.org/doc/ros2/Installation/Dashing/Linux-Install-Binary/"
+        read -t 5 -p "I am going to wait for 5 seconds only ..."
         exit 1
       else
         # source the ROS2 environment (from arg)
@@ -85,6 +86,7 @@ if [ -z $ros_distro ]; then
       if [ -z $ros_path ]; then
         echo "- No ROS 2 distro installed or not installed in the default directory."
         echo "  If you are using a ROS 2 version installed from source, please set the install location with '--ros1_path' arg! (ex: ~/ros_src/foxy/install). Otherwise, please install ROS 2 Foxy following https://index.ros.org/doc/ros2/Installation/Foxy/Linux-Install-Binary/"
+        read -t 5 -p "I am going to wait for 5 seconds only ..."
         exit 1
       else
         # source the ROS2 environment (from arg)
@@ -94,6 +96,7 @@ if [ -z $ros_distro ]; then
     ;;
   *)
     echo "Unsupported version of Ubuntu detected."
+    read -t 5 -p "I am going to wait for 5 seconds only ..."
     exit 1
     ;;
   esac
@@ -103,6 +106,7 @@ else
   if [ -z $ros_path ]; then
     echo "- Warning: You set a ROS 2 manually to be used."
     echo "  This assumes you want to use another ROS 2 version installed on your system. Please set the install location with '--ros2_path' arg! (ex: --ros_path ~/ros_src/eloquent/install/setup.bash)"
+    read -t 5 -p "I am going to wait for 5 seconds only ..."
     exit 1
   else
     # source the ROS 2 environment (from arg)
@@ -115,8 +119,10 @@ ROS_REPO_DIR=$(cd "$(dirname "$SCRIPT_DIR")" && pwd)
 ROS_WS_SRC_DIR=$(cd "$(dirname "$ROS_REPO_DIR")" && pwd)
 ROS_WS_DIR=$(cd "$(dirname "$ROS_WS_SRC_DIR")" && pwd)
 
+
 # clone ros1_bridge to the workspace dir
 if [ ! -z $add_ros1_bridge ] && [ ! -d "$ROS_WS_SRC_DIR/ros1_bridge" ]; then
+  read -t 5 -p "I am going to wait for 5 seconds only ..."
   cd $ROS_WS_SRC_DIR && git clone https://github.com/ros2/ros1_bridge.git -b $ROS_DISTRO
 fi
 
@@ -124,6 +130,7 @@ fi
 [ ! -v $verbose ] && colcon_output=$(echo "--event-handlers console_direct+")
 cd $ROS_WS_DIR && colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install --packages-skip ros1_bridge $colcon_output
 
+read -t 5 -p "I am going to wait for 5 seconds only ..."
 # source the ROS2 workspace environment so to have it ready to use
 source $ROS_WS_DIR/install/setup.bash
 

@@ -428,29 +428,29 @@ int UART_node::init()
 	// For Linux, set high speed polling at the chip level. Since this routine relies on a USB latency
 	// change at the chip level it may fail on certain chip sets if their driver does not support this
 	// configuration request
-	{
-		struct serial_struct serial_ctl;
+	// {
+	// 	struct serial_struct serial_ctl;
 
-		if (ioctl(_uart_fd, TIOCGSERIAL, &serial_ctl) < 0) {
-			printf("\033[0;31m[ micrortps_transport ]\tError while trying to read serial port configuration: %d\033[0m\n", errno);
+	// 	if (ioctl(_uart_fd, TIOCGSERIAL, &serial_ctl) < 0) {
+	// 		printf("\033[0;31m[ micrortps_transport ]\tError while trying to read serial port configuration: %d\033[0m\n", errno);
 
-			if (ioctl(_uart_fd, TCFLSH, TCIOFLUSH) == -1) {
-				int errno_bkp = errno;
-				printf("\033[0;31m[ protocol__splitter ]\tCould not flush terminal\033[0m\n");
-				close();
-				return -errno_bkp;
-			}
-		}
+	// 		if (ioctl(_uart_fd, TCFLSH, TCIOFLUSH) == -1) {
+	// 			int errno_bkp = errno;
+	// 			printf("\033[0;31m[ protocol__splitter ]\tCould not flush terminal\033[0m\n");
+	// 			close();
+	// 			return -errno_bkp;
+	// 		}
+	// 	}
 
-		serial_ctl.flags |= ASYNC_LOW_LATENCY;
+	// 	serial_ctl.flags |= ASYNC_LOW_LATENCY;
 
-		if (ioctl(_uart_fd, TIOCSSERIAL, &serial_ctl) < 0) {
-			int errno_bkp = errno;
-			printf("\033[0;31m[ micrortps_transport ]\tError while trying to write serial port latency: %d\033[0m\n", errno);
-			close();
-			return -errno_bkp;
-		}
-	}
+	// 	if (ioctl(_uart_fd, TIOCSSERIAL, &serial_ctl) < 0) {
+	// 		int errno_bkp = errno;
+	// 		printf("\033[0;31m[ micrortps_transport ]\tError while trying to write serial port latency: %d\033[0m\n", errno);
+	// 		close();
+	// 		return -errno_bkp;
+	// 	}
+	// }
 #endif /* __linux__ */
 
 	char aux[64];

@@ -1,0 +1,69 @@
+[0.000000] (-) TimerEvent: {}
+[0.000710] (px4_ros_com) JobQueued: {'identifier': 'px4_ros_com', 'dependencies': OrderedDict()}
+[0.001503] (px4_ros_com) JobStarted: {'identifier': 'px4_ros_com'}
+[0.019667] (px4_ros_com) JobProgress: {'identifier': 'px4_ros_com', 'progress': 'cmake'}
+[0.021367] (px4_ros_com) Command: {'cmd': ['/usr/bin/cmake', '/home/francesco/px4_ros_com_ros2/src/px4_ros_com', '-DCMAKE_INSTALL_PREFIX=/home/francesco/px4_ros_com_ros2/src/px4_ros_com/install/px4_ros_com'], 'cwd': '/home/francesco/px4_ros_com_ros2/src/px4_ros_com/build/px4_ros_com', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('CONDA_PROMPT_MODIFIER', '(base)'), ('USER', 'francesco'), ('SSH_AGENT_PID', '1165'), ('XDG_SESSION_TYPE', 'x11'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/francesco/px4_ros_com_ros2/install/px4_ros_com/lib:/home/francesco/px4_ros_com_ros2/install/px4_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/home/francesco'), ('CONDA_SHLVL', '1'), ('OLDPWD', '/home/francesco/px4_ros_com_ros2/src'), ('DESKTOP_SESSION', 'ubuntu'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GRADLE_HOME', '/home/francesco/.sdkman/candidates/gradle/current'), ('GTK_MODULES', 'gail:atk-bridge'), ('MANAGERPID', '887'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_CE_M', ''), ('TERMINATOR_DBUS_NAME', 'net.tenshu.Terminator21a9d5db22c73a993ff0b42f64b396873'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '45029'), ('IM_CONFIG_PHASE', '1'), ('COLCON_PREFIX_PATH', '/home/francesco/px4_ros_com_ros2/install'), ('ROS_DISTRO', 'foxy'), ('LOGNAME', 'francesco'), ('SDKMAN_CANDIDATES_API', 'https://api.sdkman.io/2'), ('JOURNAL_STREAM', '8:37888'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'francesco'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('_CE_CONDA', ''), ('ROS_LOCALHOST_ONLY', '0'), ('WINDOWPATH', '2'), ('PATH', '/home/francesco/anaconda3/bin:/home/francesco/anaconda3/condabin:/home/francesco/.sdkman/candidates/gradle/current/bin:/home/francesco/px4_ros_com_ros2/install/px4_ros_com/bin:/opt/ros/foxy/bin:/home/francesco/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/francesco/MyScripts'), ('SESSION_MANAGER', 'local/francesco-Lenovo-B50-80:@/tmp/.ICE-unix/1204,unix/francesco-Lenovo-B50-80:/tmp/.ICE-unix/1204'), ('SDKMAN_CANDIDATES_DIR', '/home/francesco/.sdkman/candidates'), ('INVOCATION_ID', 'f61c28b9d20c40809ebe5eb2078d06ee'), ('XDG_MENU_PREFIX', 'gnome-'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('TERMINATOR_DBUS_PATH', '/net/tenshu/Terminator2'), ('LANG', 'it_IT.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('SDKMAN_DIR', '/home/francesco/.sdkman'), ('SDKMAN_PLATFORM', 'linuxx64'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/home/francesco/px4_ros_com_ros2/install/px4_ros_com:/home/francesco/px4_ros_com_ros2/install/px4_msgs:/opt/ros/foxy'), ('CONDA_PYTHON_EXE', '/home/francesco/anaconda3/bin/python'), ('SHELL', '/bin/bash'), ('TERMINATOR_UUID', 'urn:uuid:34993928-857e-4725-9fc8-fb5bf8a3db91'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('CONDA_DEFAULT_ENV', 'base'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/francesco/px4_ros_com_ros2/src/px4_ros_com/build/px4_ros_com'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('CONDA_EXE', '/home/francesco/anaconda3/bin/conda'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/francesco/px4_ros_com_ros2/install/px4_msgs/lib/python3.8/site-packages:/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/home/francesco/anaconda3'), ('COLCON', '1'), ('VTE_VERSION', '6003'), ('CMAKE_PREFIX_PATH', '/home/francesco/px4_ros_com_ros2/install/px4_ros_com:/home/francesco/px4_ros_com_ros2/install/px4_msgs:/opt/ros/foxy')]), 'shell': False}
+[0.063331] (px4_ros_com) StdoutLine: {'line': b'-- Using C++17 compiler\n'}
+[0.064247] (px4_ros_com) StdoutLine: {'line': b'-- Found ament_cmake: 0.9.11 (/opt/ros/foxy/share/ament_cmake/cmake)\n'}
+[0.096605] (px4_ros_com) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /home/francesco/anaconda3/bin/python3\n'}
+[0.099575] (-) TimerEvent: {}
+[0.200040] (-) TimerEvent: {}
+[0.300649] (-) TimerEvent: {}
+[0.401088] (-) TimerEvent: {}
+[0.459518] (px4_ros_com) StdoutLine: {'line': b'-- Override CMake install command with custom implementation using symlinks instead of copying resources\n'}
+[0.471972] (px4_ros_com) StdoutLine: {'line': b'-- Found builtin_interfaces: 1.0.0 (/opt/ros/foxy/share/builtin_interfaces/cmake)\n'}
+[0.501224] (-) TimerEvent: {}
+[0.506490] (px4_ros_com) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.511182] (px4_ros_com) StdoutLine: {'line': b'-- Found rosidl_adapter: 1.3.0 (/opt/ros/foxy/share/rosidl_adapter/cmake)\n'}
+[0.601320] (-) TimerEvent: {}
+[0.680979] (px4_ros_com) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.701536] (-) TimerEvent: {}
+[0.742415] (px4_ros_com) StdoutLine: {'line': b'-- Found rclcpp: 2.4.2 (/opt/ros/foxy/share/rclcpp/cmake)\n'}
+[0.799260] (px4_ros_com) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)\n'}
+[0.801505] (px4_ros_com) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.802057] (-) TimerEvent: {}
+[0.902481] (-) TimerEvent: {}
+[0.988484] (px4_ros_com) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 1.3.1 (/opt/ros/foxy/share/rmw_fastrtps_cpp/cmake)\n'}
+[1.002596] (-) TimerEvent: {}
+[1.102932] (-) TimerEvent: {}
+[1.134378] (px4_ros_com) StdoutLine: {'line': b'-- Found px4_msgs: 2.0.1 (/home/francesco/px4_ros_com_ros2/install/px4_msgs/share/px4_msgs/cmake)\n'}
+[1.157628] (px4_ros_com) StdoutLine: {'line': b'-- Found sensor_msgs: 2.0.5 (/opt/ros/foxy/share/sensor_msgs/cmake)\n'}
+[1.203044] (-) TimerEvent: {}
+[1.303387] (-) TimerEvent: {}
+[1.327483] (px4_ros_com) StdoutLine: {'line': b'-- Found eigen3_cmake_module: 0.1.1 (/opt/ros/foxy/share/eigen3_cmake_module/cmake)\n'}
+[1.331081] (px4_ros_com) StdoutLine: {'line': b'-- fastrtpsgen found in /usr/local/bin\n'}
+[1.390609] (px4_ros_com) StderrLine: {'line': b'openjdk version "1.8.0_362"\n'}
+[1.390856] (px4_ros_com) StderrLine: {'line': b'OpenJDK Runtime Environment (build 1.8.0_362-8u372-ga~us1-0ubuntu1~20.04-b09)\n'}
+[1.390953] (px4_ros_com) StderrLine: {'line': b'OpenJDK 64-Bit Server VM (build 25.362-b09, mixed mode)\n'}
+[1.403499] (-) TimerEvent: {}
+[1.418867] (px4_ros_com) StdoutLine: {'line': b'-- fastrtpsgen version 1.0.4\n'}
+[1.419162] (px4_ros_com) StdoutLine: {'line': b'-- px4_msgs message dir under /home/francesco/px4_ros_com_ros2/install/px4_msgs/share/px4_msgs/msg\n'}
+[1.419304] (px4_ros_com) StdoutLine: {'line': b'-- IDL definitions under /home/francesco/px4_ros_com_ros2/install/px4_msgs/share/px4_msgs/msg\n'}
+[1.419434] (px4_ros_com) StdoutLine: {'line': b'-- Retrieving list of msgs to send...\n'}
+[1.493545] (px4_ros_com) StdoutLine: {'line': b'-- List of msgs to send: DebugArray, DebugKeyValue, DebugValue, DebugVect, OffboardControlMode, OnboardComputerStatus, OpticalFlow, PositionSetpoint, PositionSetpointTriplet, TelemetryStatus, Timesync, TrajectoryBezier, VehicleCommand, VehicleLocalPositionSetpoint, VehicleTrajectoryBezier, VehicleTrajectoryWaypoint, TrajectorySetpoint, VehicleMocapOdometry, VehicleVisualOdometry\n'}
+[1.493761] (px4_ros_com) StdoutLine: {'line': b'-- Retrieving list of msgs to receive...\n'}
+[1.503624] (-) TimerEvent: {}
+[1.561156] (px4_ros_com) StdoutLine: {'line': b'-- List of msgs to receive: CollisionConstraints, SensorCombined, Timesync, TimesyncStatus, TrajectoryWaypoint, VehicleControlMode, VehicleOdometry, VehicleStatus\n'}
+[1.603751] (-) TimerEvent: {}
+[1.625164] (px4_ros_com) StderrLine: {'line': b'Traceback (most recent call last):\n'}
+[1.625498] (px4_ros_com) StderrLine: {'line': b'  File "/opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 21, in <module>\n'}
+[1.625706] (px4_ros_com) StderrLine: {'line': b'    from catkin_pkg.package import parse_package_string\n'}
+[1.625887] (px4_ros_com) StderrLine: {'line': b"ModuleNotFoundError: No module named 'catkin_pkg'\n"}
+[1.630031] (px4_ros_com) StderrLine: {'line': b'CMake Error at /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:94 (message):\n'}
+[1.630382] (px4_ros_com) StderrLine: {'line': b'  execute_process(/home/francesco/anaconda3/bin/python3\n'}
+[1.630600] (px4_ros_com) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py\n'}
+[1.630845] (px4_ros_com) StderrLine: {'line': b'  /home/francesco/px4_ros_com_ros2/src/px4_ros_com/package.xml\n'}
+[1.631018] (px4_ros_com) StderrLine: {'line': b'  /home/francesco/px4_ros_com_ros2/src/px4_ros_com/build/px4_ros_com/ament_cmake_core/package.cmake)\n'}
+[1.631179] (px4_ros_com) StderrLine: {'line': b'  returned error code 1\n'}
+[1.631328] (px4_ros_com) StderrLine: {'line': b'Call Stack (most recent call first):\n'}
+[1.631474] (px4_ros_com) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:49 (_ament_package_xml)\n'}
+[1.631616] (px4_ros_com) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package.cmake:63 (ament_package_xml)\n'}
+[1.631839] (px4_ros_com) StderrLine: {'line': b'  CMakeLists.txt:159 (ament_package)\n'}
+[1.631988] (px4_ros_com) StderrLine: {'line': b'\n'}
+[1.632125] (px4_ros_com) StderrLine: {'line': b'\n'}
+[1.633871] (px4_ros_com) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[1.634123] (px4_ros_com) StdoutLine: {'line': b'See also "/home/francesco/px4_ros_com_ros2/src/px4_ros_com/build/px4_ros_com/CMakeFiles/CMakeOutput.log".\n'}
+[1.634275] (px4_ros_com) StdoutLine: {'line': b'See also "/home/francesco/px4_ros_com_ros2/src/px4_ros_com/build/px4_ros_com/CMakeFiles/CMakeError.log".\n'}
+[1.646392] (px4_ros_com) CommandEnded: {'returncode': 1}
+[1.682730] (px4_ros_com) JobEnded: {'identifier': 'px4_ros_com', 'rc': 1}
+[1.693437] (-) EventReactorShutdown: {}

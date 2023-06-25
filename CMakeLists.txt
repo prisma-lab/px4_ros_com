@@ -52,6 +52,11 @@ if(ROS_DISTRO IN_LIST ROS_DISTROS)
   find_package(eigen3_cmake_module REQUIRED)
 endif()
 find_package(Eigen3 REQUIRED NO_MODULE)
+find_package(Boost REQUIRED COMPONENTS
+	system 
+	thread 
+	program_options
+)
 
 ###################################
 # Generate micro-RTPS agent code ##
@@ -96,7 +101,28 @@ target_link_libraries(micrortps_agent fastcdr fastrtps ${rclcpp_LIBRARIES})
 custom_executable(examples/listeners sensor_combined_listener)
 custom_executable(examples/listeners vehicle_gps_position_listener)
 custom_executable(examples/advertisers debug_vect_advertiser)
-custom_executable(examples/offboard offboard_control)
+#custom_executable(examples/offboard offboard_control)
+
+# Add Offboard
+#add_executable(offboard_control src/examples/offboard/offboard_control.cpp
+#		src/examples/offboard/Trajectory.cpp)
+add_executable(offboard_control src/examples/offboard/offboard_control.cpp
+		src/examples/offboard/Trajectory.cpp src/examples/offboard/planner_spline.cpp)
+
+ament_target_dependencies(offboard_control
+	rclcpp
+	px4_msgs
+	Eigen3
+	Boost
+)
+target_include_directories(offboard_control PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+  ${Eigen3_INCLUDE_DIRS}
+)
+target_link_libraries(offboard_control Eigen3::Eigen ${Boost_LIBRARIES})
+install(TARGETS offboard_control
+DESTINATION lib/${PROJECT_NAME})
 
 ############
 # Install ##
