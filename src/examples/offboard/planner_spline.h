@@ -56,6 +56,12 @@ public:
 		_xdf.resize(6);
 		_xddi.resize(6);
 		_xddf.resize(6);
+		_last_x.pose.position.x = _last_x.pose.position.y = _last_x.pose.position.z = 0.0f;
+		_last_x.pose.orientation.w = _last_x.pose.orientation.x = _last_x.pose.orientation.y = _last_x.pose.orientation.z = 0.0f;
+		_last_xd.twist.linear.x = _last_xd.twist.linear.y = _last_xd.twist.linear.z = 0.0f;
+		_last_xd.twist.angular.x = _last_xd.twist.angular.y = _last_xd.twist.angular.z = 0.0f;
+		_last_xdd.accel.linear.x = _last_xdd.accel.linear.y = _last_xdd.accel.linear.z = 0.0f;
+		_last_xdd.accel.angular.x = _last_xdd.accel.angular.y = _last_xdd.accel.angular.z = 0.0f;
 	};
 	void compute();
 	void set_waypoints(std::vector<geometry_msgs::msg::PoseStamped> poses, std::vector<double> times);
@@ -65,6 +71,11 @@ public:
 	std::vector<geometry_msgs::msg::PoseStamped> _x;
 	std::vector<geometry_msgs::msg::TwistStamped> _xd;
 	std::vector<geometry_msgs::msg::AccelStamped> _xdd;
+
+	geometry_msgs::msg::PoseStamped _last_x;
+	geometry_msgs::msg::TwistStamped _last_xd;
+	geometry_msgs::msg::AccelStamped _last_xdd;
+
 	std::vector<double> _t;
 
 private:

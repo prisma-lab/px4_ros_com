@@ -45,6 +45,8 @@
 
 #pragma once
 
+#include <px4_msgs/msg/tilting_attitude_setpoint.hpp>
+
 #include <px4_msgs/msg/vehicle_odometry.hpp>
 #include <px4_msgs/msg/offboard_control_mode.hpp>
 #include <px4_msgs/msg/trajectory_setpoint.hpp>
@@ -111,8 +113,10 @@ private:
 
 	CARTESIAN_PLANNER _trajectory{_timer_freq};
 	void firstTraj();
+	void takeoffTraj(float alt);
 	void startTraj(matrix::Vector3f pos, float roll, float pitch, float yaw, double d);
 
+	rclcpp::Publisher<TiltingAttitudeSetpoint>::SharedPtr _tilting_attitude_setpoint_publisher;
 	rclcpp::Publisher<OffboardControlMode>::SharedPtr _offboard_control_mode_publisher;
 	rclcpp::Publisher<TrajectorySetpoint>::SharedPtr _trajectory_setpoint_publisher;
 	rclcpp::Publisher<VehicleCommand>::SharedPtr _vehicle_command_publisher;
@@ -123,6 +127,8 @@ private:
 
 	matrix::Quaternionf _attitude{};
 	matrix::Vector3f _position{};
+	matrix::Vector3f _last_pos_sp{};
+	matrix::Quaternionf _last_att_sp{};
 
 	uint64_t _offboard_setpoint_counter;   //!< counter for the number of setpoints sent
 

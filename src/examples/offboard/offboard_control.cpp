@@ -1,5 +1,7 @@
 #include "offboard_control.hpp"
 
+#include <cmath>
+
 OffboardControl::OffboardControl() : Node("offboard_control"), _state(STOPPED) {
 #ifdef ROS_DEFAULT_API
 	_offboard_control_mode_publisher =
@@ -8,6 +10,8 @@ OffboardControl::OffboardControl() : Node("offboard_control"), _state(STOPPED) {
 		this->create_publisher<TrajectorySetpoint>("fmu/trajectory_setpoint/in", 10);
 	_vehicle_command_publisher =
 		this->create_publisher<VehicleCommand>("fmu/vehicle_command/in", 10);
+	_tilting_attitude_setpoint_publisher =
+		this->create_publisher<TiltingAttitudeSetpoint>("fmu/tilting_attitude_setpoint/in", 10);
 #else
 	_offboard_control_mode_publisher =
 		this->create_publisher<OffboardControlMode>("fmu/offboard_control_mode/in");
@@ -15,6 +19,8 @@ OffboardControl::OffboardControl() : Node("offboard_control"), _state(STOPPED) {
 		this->create_publisher<TrajectorySetpoint>("fmu/trajectory_setpoint/in");
 	_vehicle_command_publisher =
 		this->create_publisher<VehicleCommand>("fmu/vehicle_command/in");
+	_tilting_attitude_setpoint_publisher =
+		this->create_publisher<TiltingAttitudeSetpoint>("fmu/tilting_attitude_setpoint/in");
 #endif
 
 	// get common timestamp
@@ -30,6 +36,12 @@ OffboardControl::OffboardControl() : Node("offboard_control"), _state(STOPPED) {
 				_first_odom = true;
 				_attitude = matrix::Quaternionf(msg->q.data()[0], msg->q.data()[1], msg->q.data()[2], msg->q.data()[3]);
 				_position = matrix::Vector3f(msg->x, msg->y, msg->z);
+				if(isnanf(_position(0)) || 
+						isnanf(_position(1)) ||
+						isnanf(_position(2))) {
+					RCLCPP_WARN(rclcpp::get_logger("OFFBOARD"), "INVALID POSITION: %10.5f, %10.5f, %10.5f",
+						_position(0), _position(1), _position(2));
+				}
 			});
 
 	_offboard_setpoint_counter = 0;
@@ -70,7 +82,7 @@ void OffboardControl::key_input() {
 	bool exit = false;
 	std::string cmd;
 	while(!exit && rclcpp::ok()) {
-		std::cout << "Enter command [arm | go | acc | vel | vely | stop]: \n"; 
+		std::cout << "Enter command [arm | go | takeoff | stop]: \n"; 
 		std::cin >> cmd;
 		if(cmd == "go") {
 			matrix::Vector3f sp;
@@ -92,6 +104,12 @@ void OffboardControl::key_input() {
 			std::cin >> duration;
 			startTraj(sp, roll, pitch, yaw, duration);
 
+		}
+		else if(cmd == "takeoff") {
+			float alt;
+			std::cout << "Enter altitude: "; 
+			std::cin >> alt;
+			takeoffTraj(alt);
 		}
 		else if(cmd == "stop") {
 			exit = true;
@@ -155,6 +173,22 @@ void OffboardControl::publish_trajectory_setpoint() const {
 	msg.yaw = matrix::Eulerf(des_att).psi();
 	msg.yawspeed = 0.0f;
 
+	TiltingAttitudeSetpoint att_sp{};
+	att_sp.timestamp = msg.timestamp;
+
+	att_sp.q_d[0] = des_att(0);
+	att_sp.q_d[1] = des_att(1);
+	att_sp.q_d[2] = des_att(2);
+	att_sp.q_d[3] = des_att(3);
+	
+	// std::cout << att_sp.q_d[0] << ", ";
+	// std::cout << att_sp.q_d[1] << ", ";
+	// std::cout << att_sp.q_d[2] << ", ";
+	// std::cout << att_sp.q_d[3] << "\n";
+
+	_tilting_attitude_setpoint_publisher->publish(att_sp);
+
+
 	// msg.x = _current_position_setpoint(0);
 	// msg.y = _current_position_setpoint(1);
 	// msg.z = _current_position_setpoint(2);
@@ -195,25 +229,66 @@ void OffboardControl::firstTraj() {
 	geometry_msgs::msg::PoseStamped p;
 	double t;
 
-	p.pose.position.x = _position(0);
-	p.pose.position.y = _position(1);
-	p.pose.position.z = _position(2); 
+	_last_pos_sp = _position;
+	_last_att_sp = _attitude;
 
-	p.pose.orientation.w = _attitude(0);
-	p.pose.orientation.x = _attitude(1);
-	p.pose.orientation.y = _attitude(2);
-	p.pose.orientation.z = _attitude(3);
+	p.pose.position.x = _last_pos_sp(0);
+	p.pose.position.y = _last_pos_sp(1);
+	p.pose.position.z = _last_pos_sp(2); 
+
+	p.pose.orientation.w = _last_att_sp(0);
+	p.pose.orientation.x = _last_att_sp(1);
+	p.pose.orientation.y = _last_att_sp(2);
+	p.pose.orientation.z = _last_att_sp(3);
 	t = 0.0f;
 
 	poses.push_back(p);
 	times.push_back(t);
 	
-	p.pose.orientation.w = 1.0f;
-	p.pose.orientation.x = 0.0f;
-	p.pose.orientation.y = 0.0f;
-	p.pose.orientation.z = 0.0f;
 	poses.push_back(p);
 	times.push_back(0.1);
+
+	_trajectory.set_waypoints(poses, times);
+	_trajectory.compute();
+
+	// for (int i=0; i<_trajectory._x.size(); i++) {
+	// 	std::cout << _trajectory._x[i].pose.orientation.w << ", ";
+	// 	std::cout << _trajectory._x[i].pose.orientation.x << ", ";
+	// 	std::cout << _trajectory._x[i].pose.orientation.y << ", ";
+	// 	std::cout << _trajectory._x[i].pose.orientation.z << "\n";
+	// }
+}
+
+void OffboardControl::takeoffTraj(float alt) {
+
+	while(_trajectory.isReady()) {
+		usleep(0.1e6);
+	}
+
+	std::vector<geometry_msgs::msg::PoseStamped> poses;
+	std::vector<double> times;
+	geometry_msgs::msg::PoseStamped p;
+	double t;
+
+	p.pose.position.x = _last_pos_sp(0);
+	p.pose.position.y = _last_pos_sp(1);
+	p.pose.position.z = _last_pos_sp(2); 
+
+	p.pose.orientation.w = _last_att_sp(0);
+	p.pose.orientation.x = _last_att_sp(1);
+	p.pose.orientation.y = _last_att_sp(2);
+	p.pose.orientation.z = _last_att_sp(3);
+	t = 0.0f;
+
+	poses.push_back(p);
+	times.push_back(t);
+	
+	alt = alt > 0 ? -alt : alt;
+	p.pose.position.z = alt; 
+	poses.push_back(p);
+	times.push_back(3.0f * abs(alt));
+
+	_last_pos_sp(2) = alt;
 
 	_trajectory.set_waypoints(poses, times);
 	_trajectory.compute();
@@ -230,20 +305,22 @@ void OffboardControl::startTraj(matrix::Vector3f pos, float roll, float pitch, f
 	geometry_msgs::msg::PoseStamped p;
 	double t;
 
-	roll = abs(roll) > 0.5f ? 0.5f * matrix::sign(roll) : roll;
-	pitch = abs(pitch) > 0.5f ? 0.5f * matrix::sign(pitch) : roll;
+	roll = abs(roll) > 0.3f ? 0.3f * matrix::sign(roll) : roll;
+	pitch = abs(pitch) > 0.3f ? 0.3f * matrix::sign(pitch) : pitch;
+	if(pos(2) > 0.0f)
+		pos(2) *= -1;
 
 	matrix::Quaternionf att(matrix::Eulerf(roll, pitch, yaw));
 
 	/* */
-	p.pose.position.x = _position(0);
-	p.pose.position.y = _position(1);
-	p.pose.position.z = _position(2); 
+	p.pose.position.x = _last_pos_sp(0);
+	p.pose.position.y = _last_pos_sp(1);
+	p.pose.position.z = _last_pos_sp(2); 
 
-	p.pose.orientation.w = _attitude(0);
-	p.pose.orientation.x = _attitude(1);
-	p.pose.orientation.y = _attitude(2);
-	p.pose.orientation.z = _attitude(3);
+	p.pose.orientation.w = _last_att_sp(0);
+	p.pose.orientation.x = _last_att_sp(1);
+	p.pose.orientation.y = _last_att_sp(2);
+	p.pose.orientation.z = _last_att_sp(3);
 
 	t = 0.0;
 	
@@ -262,13 +339,19 @@ void OffboardControl::startTraj(matrix::Vector3f pos, float roll, float pitch, f
 
 	t = d;
 
+	_last_pos_sp = pos;
+	_last_att_sp = att;
+
 	poses.push_back(p);
 	times.push_back(t);
+
+	auto start = steady_clock::now();
 
 	_trajectory.set_waypoints(poses, times);
 
 	_trajectory.compute();
 
+	auto end = steady_clock::now();
 }
 
 int main(int argc, char* argv[]) {

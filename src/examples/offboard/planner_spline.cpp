@@ -239,11 +239,11 @@ bool SPLINE_PLANNER::getNext(double &x, double &xd, double &xdd)
 	xd = _xd[_counter];
 	xdd = _xdd[_counter];
 
-	if (!_ready)
+	if (!_ready) {
 		return false;
+	}
 	if (_counter >= (int(_x.size()) - 1))
 	{
-		_ready = false;
 		return false;
 	}
 
@@ -267,12 +267,17 @@ void CARTESIAN_PLANNER::set_waypoints(std::vector<geometry_msgs::msg::PoseStampe
 	_N = _poses.size();
 	// RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Number of points received: %d", _N);
 	// RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Number of times received:  %d", _times.size());
-	// RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Starting point: %10.5f, %10.5f, %10.5f",
-	// 				_poses[0].pose.position.x, _poses[0].pose.position.y, _poses[0].pose.position.z);
-	// RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Final point:    %10.5f, %10.5f, %10.5f",
-	// 				_poses[_N-1].pose.position.x, _poses[_N-1].pose.position.y, _poses[_N-1].pose.position.z);
-	// RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Starting time:  %f", _times.front());
-	// RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Final time:     %f", _times.back());
+	RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Starting point: %10.5f, %10.5f, %10.5f",
+					_poses[0].pose.position.x, _poses[0].pose.position.y, _poses[0].pose.position.z);
+	RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Final point:    %10.5f, %10.5f, %10.5f",
+					_poses[_N-1].pose.position.x, _poses[_N-1].pose.position.y, _poses[_N-1].pose.position.z);
+	RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Starting time:  %f", _times.front());
+	RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Final time:     %f", _times.back());
+
+	RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Starting quat: %10.5f, %10.5f, %10.5f, %10.5f",
+					_poses[0].pose.orientation.w, _poses[0].pose.orientation.x, _poses[0].pose.orientation.y, _poses[0].pose.orientation.z);
+	RCLCPP_INFO(rclcpp::get_logger("CARTESIAN"), "Final quat:    %10.5f, %10.5f, %10.5f, %10.5f",
+					_poses[_N-1].pose.orientation.w, _poses[_N-1].pose.orientation.x, _poses[_N-1].pose.orientation.y, _poses[_N-1].pose.orientation.z);
 
 	_xdi = Eigen::VectorXd::Zero(6);
 	_xdf = Eigen::VectorXd::Zero(6);
@@ -471,14 +476,23 @@ void CARTESIAN_PLANNER::compute()
 
 bool CARTESIAN_PLANNER::getNext(geometry_msgs::msg::PoseStamped &x, geometry_msgs::msg::TwistStamped &xd, geometry_msgs::msg::AccelStamped &xdd)
 {
+	
+	if (!_ready){
+		x = _last_x;
+		xd = _last_xd;
+		xdd = _last_xdd;
+		return false;
+	}
+	
 	x = _x[_counter];
 	xd = _xd[_counter];
 	xdd = _xdd[_counter];
-
-	if (!_ready)
-		return false;
+	
 	if (_counter >= (int(_x.size()) - 1))
 	{
+		_last_x = _x[_counter];
+		_last_xd = _xd[_counter];
+		_last_xdd = _xdd[_counter];
 		_ready = false;
 		return false;
 	}
