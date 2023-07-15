@@ -65,6 +65,7 @@
 #include <boost/thread/mutex.hpp>
 
 #include <string>
+#include <vector>
 
 #include <chrono>
 #include <iostream>
@@ -129,6 +130,9 @@ private:
 	matrix::Vector3f _position{};
 	matrix::Vector3f _last_pos_sp{};
 	matrix::Quaternionf _last_att_sp{};
+
+	std::vector<double> _traj_points;
+	bool _traj_present = false;
 
 	uint64_t _offboard_setpoint_counter;   //!< counter for the number of setpoints sent
 

@@ -23,6 +23,16 @@ OffboardControl::OffboardControl() : Node("offboard_control"), _state(STOPPED) {
 		this->create_publisher<TiltingAttitudeSetpoint>("fmu/tilting_attitude_setpoint/in");
 #endif
 
+	this->declare_parameter<std::vector<double>>("traj_points", {});
+	rclcpp::Parameter traj_param;
+	_traj_present = this->get_parameter("traj_points", traj_param);
+	if(_traj_present) {
+		_traj_points = traj_param.as_double_array();
+		if(_traj_points.size() % 7 != 0)
+			_traj_present = false;
+	}
+
+
 	// get common timestamp
 	_timesync_sub =
 		this->create_subscription<px4_msgs::msg::Timesync>("fmu/timesync/out", 10,
@@ -104,6 +114,20 @@ void OffboardControl::key_input() {
 			std::cin >> duration;
 			startTraj(sp, roll, pitch, yaw, duration);
 
+		}
+		else if(cmd == "traj") {
+			if(!_traj_present) {
+				std::cout << "Trajectory not loaded correctly!\n";
+				continue;
+			}
+			for(int i = 0; i<_traj_points.size(); i+=7) {
+				matrix::Vector3f sp(_traj_points[i], _traj_points[i+1], _traj_points[i+2]);
+				float roll  = _traj_points[i+3];
+				float pitch = _traj_points[i+4];
+				float yaw   = _traj_points[i+5];
+				double duration = _traj_points[i+6];
+				startTraj(sp, roll, pitch, yaw, duration);
+			}
 		}
 		else if(cmd == "takeoff") {
 			float alt;
