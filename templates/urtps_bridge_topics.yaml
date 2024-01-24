@@ -67,3 +67,24 @@ rtps:
   - msg: TiltingAttitudeSetpoint
     receive: true
     send: true
+  - msg: VehicleLocalPosition
+    send: true
+  - msg: VehicleAttitude
+    send: true
+  - msg: VehicleAngularVelocity
+    send: true
+  - msg: VehicleThrustSetpoint
+    receive: true
+    send: true
+  - msg: VehicleTorqueSetpoint
+    receive: true
+    send: true
+  - msg: ActuatorMotors
+    receive: true
+    send: true
+  - msg: ActuatorServos
+    receive: true
+    send: true
+  - msg: FtSensor
+    receive: true
+    send: true
