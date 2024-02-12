@@ -21,10 +21,22 @@ find_package(builtin_interfaces REQUIRED)
 find_package(eigen3_cmake_module REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(mavros_msgs REQUIRED)
 find_package(px4_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(tf2 REQUIRED)
 
+find_package(PythonInterp 3 REQUIRED)
+if(ROS_DISTRO IN_LIST ROS_DISTROS)
+  find_package(eigen3_cmake_module REQUIRED)
+endif()
+find_package(Eigen3 REQUIRED NO_MODULE)
+find_package(Boost REQUIRED COMPONENTS
+	system 
+	thread 
+	program_options
+)
 #################
 # Setup targets #
 #################
@@ -45,10 +57,10 @@ add_executable(sensor_combined_listener src/examples/listeners/sensor_combined_l
 ament_target_dependencies(sensor_combined_listener rclcpp px4_msgs)
 install(TARGETS sensor_combined_listener DESTINATION lib/${PROJECT_NAME})
 
-# examples/listeners/vehicle_gps_position_listener
-add_executable(vehicle_gps_position_listener src/examples/listeners/vehicle_gps_position_listener.cpp)
-ament_target_dependencies(vehicle_gps_position_listener rclcpp px4_msgs)
-install(TARGETS vehicle_gps_position_listener DESTINATION lib/${PROJECT_NAME})
+## examples/listeners/vehicle_gps_position_listener
+#add_executable(vehicle_gps_position_listener src/examples/listeners/vehicle_gps_position_listener.cpp)
+#ament_target_dependencies(vehicle_gps_position_listener rclcpp px4_msgs)
+#install(TARGETS vehicle_gps_position_listener DESTINATION lib/${PROJECT_NAME})
 
 # examples/advertisers/debug_vect_advertiser
 add_executable(debug_vect_advertiser src/examples/advertisers/debug_vect_advertiser.cpp)
@@ -56,9 +68,23 @@ ament_target_dependencies(debug_vect_advertiser rclcpp px4_msgs)
 install(TARGETS debug_vect_advertiser DESTINATION lib/${PROJECT_NAME})
 
 # examples/offboard/offboard_control
-add_executable(offboard_control src/examples/offboard/offboard_control.cpp)
-ament_target_dependencies(offboard_control rclcpp px4_msgs)
+add_executable(offboard_control src/examples/offboard/offboard_control.cpp src/examples/offboard/Trajectory.cpp src/examples/offboard/planner_spline.cpp)
+ament_target_dependencies(offboard_control rclcpp
+	px4_msgs
+	geometry_msgs
+	tf2
+	Eigen3
+	Boost)
 install(TARGETS offboard_control DESTINATION lib/${PROJECT_NAME})
+add_executable(mavros_repub src/examples/offboard/mavros_repub.cpp )
+ament_target_dependencies(mavros_repub rclcpp
+	px4_msgs
+	geometry_msgs
+	mavros_msgs
+	tf2
+	Eigen3
+	Boost)
+install(TARGETS mavros_repub DESTINATION lib/${PROJECT_NAME})
 
 
 ############
