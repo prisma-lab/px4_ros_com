@@ -188,8 +188,8 @@ void OffboardControl::publish_trajectory_setpoint() {
 
 	matrix::Quaternionf des_att(_x.pose.orientation.w, _x.pose.orientation.x, _x.pose.orientation.y, _x.pose.orientation.z);
 	msg.yaw = matrix::Eulerf(des_att).psi();
-	msg.yawspeed = _x.twist.angular.z;
-
+//	msg.yawspeed = _x.twist.angular.z;
+        msg.yawspeed = 0.0f;
 	
 	// msg.x = _current_position_setpoint(0);
 	// msg.y = _current_position_setpoint(1);

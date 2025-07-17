@@ -21,7 +21,6 @@ find_package(builtin_interfaces REQUIRED)
 find_package(eigen3_cmake_module REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(mavros_msgs REQUIRED)
 find_package(px4_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
@@ -84,17 +83,6 @@ ament_target_dependencies(offboard_control_px4 rclcpp
 	Eigen3
 	Boost)
 install(TARGETS offboard_control_px4 DESTINATION lib/${PROJECT_NAME})
-
-add_executable(mavros_repub src/examples/offboard/mavros_repub.cpp )
-ament_target_dependencies(mavros_repub rclcpp
-	px4_msgs
-	geometry_msgs
-	mavros_msgs
-	tf2
-	Eigen3
-	Boost)
-install(TARGETS mavros_repub DESTINATION lib/${PROJECT_NAME})
-
 
 ############
 # Install ##
