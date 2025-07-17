@@ -1,13 +1,12 @@
-#include "offboard_control.hpp"
+#include "offboard_control_px4.hpp"
 
 #include <cmath>
 
-OffboardControl::OffboardControl() : Node("offboard_control"), _state(STOPPED){
+OffboardControl::OffboardControl() : Node("offboard_control_px4"), _state(STOPPED){
 
     _offboard_control_mode_publisher = this->create_publisher<OffboardControlMode>("/fmu/in/offboard_control_mode", 10);
     _trajectory_setpoint_publisher = this->create_publisher<TrajectorySetpoint>("/fmu/in/trajectory_setpoint", 10);
     _vehicle_command_publisher = this->create_publisher<VehicleCommand>("/fmu/in/vehicle_command", 10);
-    _tilting_attitude_setpoint_publisher = this->create_publisher<TiltingAttitudeSetpoint>("fmu/in/tilting_attitude_setpoint", 10);
     
     // this->declare_parameter<std::vector<double>>("traj_points", {});
 	// rclcpp::Parameter traj_param;
@@ -48,7 +47,7 @@ OffboardControl::OffboardControl() : Node("offboard_control"), _state(STOPPED){
 
         if (offboard_setpoint_counter_ == 20) {
             // Change to Offboard mode after 10 setpoints
-            this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 10, 1);
+                this->publish_vehicle_command(px4_msgs::msg::VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
 
             // Arm the vehicle
             // this->arm();
@@ -189,24 +188,9 @@ void OffboardControl::publish_trajectory_setpoint() {
 
 	matrix::Quaternionf des_att(_x.pose.orientation.w, _x.pose.orientation.x, _x.pose.orientation.y, _x.pose.orientation.z);
 	msg.yaw = matrix::Eulerf(des_att).psi();
-	msg.yawspeed = 0.0f;
+	msg.yawspeed = _x.twist.angular.z;
 
-	TiltingAttitudeSetpoint att_sp{};
-	att_sp.timestamp = msg.timestamp;
-
-	att_sp.q_d[0] = des_att(0);
-	att_sp.q_d[1] = des_att(1);
-	att_sp.q_d[2] = des_att(2);
-	att_sp.q_d[3] = des_att(3);
 	
-	// std::cout << att_sp.q_d[0] << ", ";
-	// std::cout << att_sp.q_d[1] << ", ";
-	// std::cout << att_sp.q_d[2] << ", ";
-	// std::cout << att_sp.q_d[3] << "\n";
-
-	_tilting_attitude_setpoint_publisher->publish(att_sp);
-
-
 	// msg.x = _current_position_setpoint(0);
 	// msg.y = _current_position_setpoint(1);
 	// msg.z = _current_position_setpoint(2);
@@ -226,21 +210,17 @@ void OffboardControl::publish_trajectory_setpoint() {
 	_trajectory_setpoint_publisher->publish(msg);
 }
 
-void OffboardControl::publish_vehicle_command(uint16_t command, float param1, float param2, float param3) {
-	VehicleCommand msg{};
-	msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+void OffboardControl::publish_vehicle_command(uint16_t command, float param1, float param2) {
+	px4_msgs::msg::VehicleCommand msg{};
 	msg.param1 = param1;
 	msg.param2 = param2;
-	msg.param3 = param3;
 	msg.command = command;
 	msg.target_system = 1;
 	msg.target_component = 1;
 	msg.source_system = 1;
 	msg.source_component = 1;
 	msg.from_external = true;
-
-	// std::cout << "Sending command\n";
-
+	msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
 	_vehicle_command_publisher->publish(msg);
 }
 

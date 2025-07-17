@@ -76,6 +76,15 @@ ament_target_dependencies(offboard_control rclcpp
 	Eigen3
 	Boost)
 install(TARGETS offboard_control DESTINATION lib/${PROJECT_NAME})
+add_executable(offboard_control_px4 src/examples/offboard/offboard_control_px4.cpp src/examples/offboard/Trajectory.cpp src/examples/offboard/planner_spline.cpp)
+ament_target_dependencies(offboard_control_px4 rclcpp
+	px4_msgs
+	geometry_msgs
+	tf2
+	Eigen3
+	Boost)
+install(TARGETS offboard_control_px4 DESTINATION lib/${PROJECT_NAME})
+
 add_executable(mavros_repub src/examples/offboard/mavros_repub.cpp )
 ament_target_dependencies(mavros_repub rclcpp
 	px4_msgs
